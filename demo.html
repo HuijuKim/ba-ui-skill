@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BA UI 견본</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@1,700&display=swap" />
+    <link rel="stylesheet" href="ba-ui.css" />
+    <style>
+      /* 견본 배치만(부품 모양은 ba-ui.css). 초상화와 성급 별은 SchaleDB의 공개 그림을 주소로 불러온다(견본에서만, 저장소에는 없다). 그 밖의 장식 그림은 없다 */
+      body {
+        margin: 0;
+        color: var(--ba-text);
+        font-family: var(--ba-font);
+        word-break: keep-all;
+      }
+      .shell { display: grid; grid-template-columns: 180px 1fr; min-height: 100vh; }
+      .shell > aside { border-right: 1px solid var(--ba-border); background: var(--ba-panel); position: relative; }
+      .page { min-width: 0; }
+      main { padding: 20px 16px 48px; display: grid; gap: 18px; max-width: 1080px; align-content: start; }
+      .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+      .between { justify-content: space-between; }
+      .card { padding: 14px 16px; display: grid; gap: 12px; }
+      .card h3 { margin: 0; font-size: 15px; letter-spacing: -0.02em; }
+      .dim { color: var(--ba-text-dim); font-size: 13px; margin: 0; }
+      .cap { color: var(--ba-text-sub); font-size: 12px; font-weight: 600; min-width: 84px; }
+      table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--ba-border); }
+      th { font-size: 13px; color: var(--ba-text-dim); font-weight: 600; }
+      a.link { color: var(--ba-link); text-decoration: none; font-size: 13px; }
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+      .roster { display: grid; grid-template-columns: repeat(4, 72px); gap: 12px; }
+      .rcard { padding: 4px; display: grid; gap: 2px; justify-items: center; font-size: 12px; font-weight: 600; }
+      .rcard .face { position: relative; width: 62px; height: 62px; }
+      .rcard .face img.p { width: 100%; height: 100%; border-radius: 4px; }
+      .rcard .face .ba-star { position: absolute; left: 1px; bottom: 1px; }
+      .lv { display: flex; align-items: center; gap: 14px; padding: 8px 22px 8px 18px; }
+      .lv .big { font-size: 28px; line-height: 1; }
+      .lv .small { color: #8de4ff; font-size: 13px; }
+      .lv .meta { display: grid; gap: 4px; min-width: 140px; }
+      .tabwrap { display: grid; }
+      .tabwrap > .ba-panel { border-top-left-radius: 0; }
+      label.opt { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+      @media (max-width: 720px) {
+        .shell { grid-template-columns: 1fr; }
+        .shell > aside { display: none; }
+        .two { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body class="ba-page-bg">
+    <div class="shell">
+      <aside>
+        <nav class="ba-nav">
+          <a href="#home">홈</a>
+          <a href="#tactics" aria-current="page">택틱</a>
+          <a href="#board">게시판 <span class="ba-dot"></span></a>
+          <a href="#students">학생 DB</a>
+          <a href="#roster">학생부</a>
+        </nav>
+      </aside>
+      <div class="page">
+        <!-- 위 띠: 왼쪽 옅은 하늘 면 무늬에서 흰색으로 -->
+        <div class="ba-topbar ba-facet--left">
+          <b>BA UI</b>
+          <span class="dim">위 띠(면 무늬는 왼쪽에서 시작)</span>
+        </div>
+        <main>
+          <!-- 페이지 제목과 화면 위 행동 버튼(사선, 주 행동은 하늘색) -->
+          <div class="row between">
+            <h2 class="ba-title">택틱</h2>
+            <div class="row">
+              <button type="button" class="ba-slant ba-btn ba-btn--plain"><span>예시</span></button>
+              <button type="button" class="ba-slant ba-btn"><span>가져오기</span></button>
+              <button type="button" class="ba-slant ba-btn ba-btn--cta"><span>새 택틱</span></button>
+            </div>
+          </div>
+
+          <!-- 버튼 종류 -->
+          <div class="ba-panel card">
+            <h3 class="ba-heading">버튼</h3>
+            <div class="row">
+              <span class="cap">사선(화면 위)</span>
+              <button type="button" class="ba-slant ba-btn ba-btn--cta"><span>주 행동</span></button>
+              <button type="button" class="ba-slant ba-btn"><span>보조</span></button>
+              <button type="button" class="ba-slant ba-btn ba-btn--plain"><span>흰 버튼</span></button>
+              <button type="button" class="ba-slant ba-btn ba-btn--navy"><span>남색</span></button>
+              <button type="button" class="ba-slant ba-btn" disabled><span>못 누름</span></button>
+            </div>
+            <div class="row">
+              <span class="cap">직사각형(도구)</span>
+              <button type="button" class="ba-btn ba-btn--cta">계산</button>
+              <button type="button" class="ba-btn">초기화</button>
+              <button type="button" class="ba-btn ba-btn--plain">복사</button>
+              <button type="button" class="ba-btn ba-btn--cta" style="padding: 0 44px">넓은 주 행동 버튼</button>
+            </div>
+          </div>
+
+          <!-- 기운 탭과 목록 패널: 편성 카드 줄 -->
+          <div class="tabwrap">
+            <div class="ba-tabs" role="tablist">
+              <button type="button" role="tab" aria-selected="true"><span>1팀</span></button>
+              <button type="button" role="tab" aria-selected="false"><span>2팀</span></button>
+              <button type="button" role="tab" aria-selected="false"><span>3팀</span></button>
+            </div>
+            <div class="ba-panel">
+              <table>
+                <thead><tr><th>이름</th><th>콘텐츠</th><th>팀</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>비나 루나틱 준고점</td>
+                    <td>총력전 · 비나 루나틱</td>
+                    <td>
+                      <div class="ba-frow">
+                        <span class="ba-fcard" style="--bullet: var(--ba-explosive)"><img src="https://schaledb.com/images/student/icon/10059.webp" alt="" /></span>
+                        <span class="ba-fcard" style="--bullet: var(--ba-piercing)"><img src="https://schaledb.com/images/student/icon/10085.webp" alt="" /></span>
+                        <span class="ba-fcard" style="--bullet: var(--ba-explosive)"><img src="https://schaledb.com/images/student/icon/10007.webp" alt="" /></span>
+                        <span class="ba-fcard" style="--bullet: var(--ba-piercing)"><img src="https://schaledb.com/images/student/icon/10096.webp" alt="" /></span>
+                        <span class="gap"></span>
+                        <span class="ba-fcard" style="--bullet: var(--ba-sonic)"><img src="https://schaledb.com/images/student/icon/20048.webp" alt="" /></span>
+                        <span class="ba-fcard" style="--bullet: var(--ba-mystic)"><img src="https://schaledb.com/images/student/icon/20039.webp" alt="" /></span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="two">
+            <!-- 카드 제목, 세그먼트(선택 칸 남색), 배지, 고르기 -->
+            <div class="ba-panel card">
+              <div class="row between">
+                <div class="row">
+                  <h3>진행 중 시즌 공략</h3>
+                  <div class="ba-seg ba-slant">
+                    <button type="button" aria-pressed="true">일본</button>
+                    <button type="button" aria-pressed="false">글로벌</button>
+                  </div>
+                </div>
+                <a class="link" href="#board">게시판</a>
+              </div>
+              <div class="row">
+                <span class="ba-slant ba-badge" style="background: var(--ba-explosive)"><span>경장갑</span></span>
+                <span class="ba-slant ba-badge" style="background: var(--ba-piercing)"><span>중장갑</span></span>
+                <span class="ba-slant ba-badge" style="background: var(--ba-mystic)"><span>특수장갑</span></span>
+                <span class="ba-slant ba-badge" style="background: #1288f8"><span>진행 중</span></span>
+                <span class="ba-cat">매일</span>
+                <span class="ba-cat" data-tone="orange">업적</span>
+              </div>
+              <div class="ba-gauge"><i style="width: 64%"></i></div>
+              <div class="row">
+                <label class="opt"><input type="radio" name="o" class="ba-radio" checked />야외</label>
+                <label class="opt"><input type="radio" name="o" class="ba-radio" />시가지</label>
+                <label class="opt"><input type="checkbox" class="ba-check" checked />치명 고정</label>
+                <label class="opt"><input type="checkbox" class="ba-check" />안정치 최소</label>
+              </div>
+              <p class="dim">흐린 글자도 회청색. 표, 입력 칸, 카드 전체는 기울이지 않는다.</p>
+            </div>
+
+            <!-- 전투 조각: EX 카드, 코스트 칸, 선택 테두리 -->
+            <div class="ba-panel card">
+              <h3 class="ba-heading">EX 카드와 코스트</h3>
+              <div class="row" style="gap: 18px; padding: 6px 8px 8px">
+                <span class="ba-excard ba-facet"><span><img src="https://schaledb.com/images/student/icon/10059.webp" alt="" /></span><b>4</b></span>
+                <span class="ba-pick"><span class="ba-excard ba-facet"><span><img src="https://schaledb.com/images/student/icon/10085.webp" alt="" /></span><b>3</b></span></span>
+                <span class="ba-excard ba-facet"><span><img src="https://schaledb.com/images/student/icon/20048.webp" alt="" /></span><b>2</b></span>
+              </div>
+              <div class="row">
+                <span class="ba-cost"><i data-on></i><i data-on></i><i data-on></i><i data-on></i><i data-on></i><i data-on></i><i></i><i></i><i></i><i></i></span>
+                <span class="ba-num">6.4</span>
+              </div>
+              <div class="row">
+                <span class="ba-tip">말풍선: 흰 바탕, 밝은 하늘색 테두리</span>
+                <span class="ba-toast">저장했습니다</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="two">
+            <!-- 학생부 작게 보기: 성급 별(전무 없으면 노란 별에 성급, 있으면 하늘색 별에 전무 성급, 게임 별 그림) -->
+            <div class="ba-panel card">
+              <h3 class="ba-heading">학생부</h3>
+              <div class="roster">
+                <div class="ba-panel rcard"><div class="face"><img class="p" src="https://schaledb.com/images/student/icon/10000.webp" alt="" /><span class="ba-star"><img src="https://raw.githubusercontent.com/SchaleDB/SchaleDB/main/images/ui/Common_Icon_Formation_Star.png" alt="" /><span>3</span></span></div><span class="ba-name-line">아루</span></div>
+                <div class="ba-panel rcard"><div class="face"><img class="p" src="https://schaledb.com/images/student/icon/10001.webp" alt="" /><span class="ba-star"><img src="https://raw.githubusercontent.com/SchaleDB/SchaleDB/main/images/ui/Common_Icon_Formation_Star.png" alt="" /><span>5</span></span></div><span class="ba-name-line">에이미</span></div>
+                <div class="ba-panel rcard"><div class="face"><img class="p" src="https://schaledb.com/images/student/icon/10002.webp" alt="" /><span class="ba-star" data-ue><img src="https://raw.githubusercontent.com/SchaleDB/SchaleDB/main/images/ui/Common_Icon_Formation_Star_2.png" alt="" /><span>2</span></span></div><span class="ba-name-line">하루나</span></div>
+                <div class="ba-panel rcard"><div class="face"><img class="p" src="https://schaledb.com/images/student/icon/10003.webp" alt="" /><span class="ba-star" data-ue><img src="https://raw.githubusercontent.com/SchaleDB/SchaleDB/main/images/ui/Common_Icon_Formation_Star_2.png" alt="" /><span>4</span></span></div><span class="ba-name-line">히후미</span></div>
+              </div>
+            </div>
+
+            <!-- 팝업: 머리 면 무늬, 발 회청, 아래 남색 두께 -->
+            <div class="ba-popup">
+              <header class="ba-facet--left">택틱 삭제</header>
+              <div>이 택틱을 지웁니다. 되돌릴 수 없습니다.</div>
+              <footer>
+                <button type="button" class="ba-slant ba-btn ba-btn--plain"><span>취소</span></button>
+                <button type="button" class="ba-slant ba-btn ba-btn--cta"><span>확인</span></button>
+              </footer>
+            </div>
+          </div>
+
+          <!-- 상단 바 조각(장식 견본): 남색 패널, 재화 칩, RANK 칩, 큰 숫자 -->
+          <div class="row">
+            <div class="ba-slant ba-panel-navy lv">
+              <div><div class="ba-num small">Lv.</div><div class="ba-num big">62</div></div>
+              <div class="meta"><b>선생님</b><div class="ba-gauge"><i style="width: 70%"></i></div></div>
+            </div>
+            <span class="ba-slant ba-chip"><span class="ba-num">565/184</span></span>
+            <span class="ba-slant ba-rank"><span>RANK 7</span></span>
+            <span class="ba-num">x2468</span>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,809 @@
+/*
+ * 블루 아카이브 풍 UI 템플릿. SKILL.md의 규칙을 CSS로 옮긴 것이다. 그대로 불러 쓰거나, 프레임워크 테마로 옮길 때 값의 기준으로 쓴다.
+ * 값의 근거: 게임 화면 측정(각도, 버튼 색 구성, 그림자, 선과 글자 색), 공식 컬러코드.
+ * 모양은 CSS와 직접 그린 SVG로 다시 그린 것이다(게임 그림은 성급 별 하나뿐). 노랑도 성급 별 말고는 쓰지 않는다.
+ */
+
+/* 글꼴: 게임 UI의 주 글꼴은 경기천년제목 Medium과 Bold다. 사이트에 실린 공식 웹폰트(src/assets/fonts, 경기도청 배포본)를 그대로 쓴다 */
+@font-face {
+  font-family: "Gyeonggi Title";
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/GyeonggiTitle-Medium.woff") format("woff");
+}
+@font-face {
+  font-family: "Gyeonggi Title";
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/GyeonggiTitle-Bold.woff") format("woff");
+}
+
+:root {
+  --ba-font: "Gyeonggi Title", "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  /* 기울기: 탭, 스킬 카드, 버프 칩, 버튼 무늬 끝이 모두 10도(측정 9.7-10.1), 위가 오른쪽으로 */
+  --ba-skew: -10deg;
+  --ba-unskew: 10deg;
+  /* 모서리: 게임의 네 단계(5, 10, 20, 30)를 버튼 높이 비율로 줄인 값. 버튼과 칩 4, 패널 4, 팝업 8 */
+  --ba-radius-xs: 2px;
+  --ba-radius: 4px;
+  --ba-radius-lg: 8px;
+
+  /* 삼각 면 무늬: 직접 그린 삼각형 띠(흰색, 면마다 다른 투명도). 바탕 그라데이션 위에 얹어 쓴다 */
+  --ba-facet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='60' viewBox='0 0 280 60' fill='%23fff'%3E%3Cpath d='M0 0h35L0 60z' opacity='.2'/%3E%3Cpath d='M0 60 35 0l35 60z' opacity='.12'/%3E%3Cpath d='M35 0h70L70 60z' opacity='.04'/%3E%3Cpath d='M70 60 105 0l35 60z' opacity='.24'/%3E%3Cpath d='M105 0h70l-35 60z' opacity='.16'/%3E%3Cpath d='M140 60 175 0l35 60z' opacity='.08'/%3E%3Cpath d='M175 0h70l-35 60z' opacity='.28'/%3E%3Cpath d='M210 60 245 0l35 60z' opacity='.14'/%3E%3Cpath d='M245 0h35v60z' opacity='.2'/%3E%3C/svg%3E");
+
+  /* 밝은 화면 */
+  --ba-bg: #d9e9f4;
+  /* 페이지 바탕(.ba-page-bg): 위 하늘에서 아래 옅은 회보라로, 그 위에 삼각형 격자 */
+  --ba-bg-grad: linear-gradient(180deg, #bde8f7 0%, #c4e5f6 50%, #dbe6f1 75%, #e8e3ea 100%);
+  --ba-bg-pattern-opacity: 1;
+  --ba-panel: #ffffff;
+  --ba-panel-2: #f2fbfe;
+  --ba-border: #bdc6d1;
+  --ba-line: #2d4663;
+  --ba-text: #2d4663;
+  --ba-text-sub: #506e8e;
+  --ba-text-dim: #6e7e8f;
+  --ba-link: #1288f8;
+  --ba-title-bar: #1288f8;
+
+  /* 주 행동 버튼: 옅은 하늘 바탕(왼쪽)에서 진한 하늘 면 무늬(오른쪽)로. --ba-cta는 무늬 없이 칠할 때의 한 색 */
+  --ba-cta: #4dceff;
+  --ba-cta-1: #77deff;
+  --ba-cta-2: #38bcfc;
+  --ba-cta-text: #2d4663;
+  /* 보조 버튼 */
+  --ba-soft: #c6e9ff;
+  --ba-soft-1: #d3eeff;
+  --ba-soft-2: #a9d6f2;
+  --ba-soft-text: #2d4663;
+  /* 흰 버튼: 흰 바탕, 오른쪽에 옅은 회청 면 */
+  --ba-plain-1: #ffffff;
+  --ba-plain-2: #cfe3ee;
+  /* 남색 버튼(화면 위 보조 행동, 닫기 옆 등) */
+  --ba-navy-btn: #042f5c;
+  --ba-navy-btn-rim: #0c59a9;
+  /* 못 누르는 버튼: 회청(게임은 중립 회색 90%이지만 회청으로 옮긴다) */
+  --ba-off: #cfd6dd;
+  --ba-off-text: #8693a1;
+
+  --ba-sel: #2d4663;
+  --ba-sel-text: #ffffff;
+  --ba-sel-bar: #4dceff;
+  --ba-seg-bg: #ebf0f5;
+  /* 선택 테두리(괄호 모양)와 말풍선 테두리 */
+  --ba-pick: #38bcfc;
+  --ba-tip-rim: #00d8fc;
+
+  /* 그림자: 검정이 아니라 남색. 버튼 아래 짧게(버튼 높이의 6% 안팎) */
+  --ba-shade: 11 29 46;
+  --ba-shadow: 0 1px 2px rgb(var(--ba-shade) / 0.18);
+  --ba-shadow-btn: 0 2px 2px rgb(var(--ba-shade) / 0.24);
+  --ba-shadow-edge: 0 2px 0 rgb(var(--ba-shade) / 0.55);
+  --ba-shadow-pop: 0 3px 0 rgb(var(--ba-shade) / 0.8), 0 10px 18px rgb(var(--ba-shade) / 0.28);
+
+  /* 위 띠(화면 제목 줄, 팝업 머리): 왼쪽 옅은 하늘 면에서 흰색으로 */
+  --ba-top-1: #ffffff;
+  --ba-top-2: #bcdcec;
+  --ba-foot: #f2f3f4;
+  --ba-foot-line: #e1e4e6;
+
+  /* 그 밖의 값 */
+  --ba-rank: #2d4c72;
+  --ba-band: #31425b;
+  --ba-toast: rgb(0 24 48 / 0.9);
+  --ba-gauge: #00bfff;
+  --ba-chip-blue: #389deb;
+  --ba-chip-orange: #df8600;
+  --ba-navy-1: #06589a;
+  --ba-navy-2: #053d56;
+  --ba-cost-tag: #143058;
+  --ba-alert: #f84010;
+
+  /* 공격 타입(게임 색) */
+  --ba-explosive: #a70c19;
+  --ba-piercing: #b26d1f;
+  --ba-mystic: #216f9c;
+  --ba-sonic: #9431a5;
+  --ba-chemical: #137973;
+}
+
+/* 어두운 화면: 남색 바탕, 하늘색 강조(주 버튼과 선택도 하늘색). 게임에는 어두운 화면이 없어 같은 규칙으로 옮긴 값이다 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ba-bg: #15212e;
+  --ba-bg-grad: none;
+  --ba-bg-pattern-opacity: 0.14;
+    --ba-panel: #1b2b3b;
+    --ba-panel-2: #213447;
+    --ba-border: #3b5168;
+    --ba-line: #7f97ae;
+    --ba-text: #ffffff;
+    --ba-text-sub: #b9c6d2;
+    --ba-text-dim: #9faab5;
+    --ba-link: #00d6fa;
+    --ba-title-bar: #00d6fa;
+    --ba-cta: #00d6fa;
+    --ba-cta-1: #35e0fc;
+    --ba-cta-2: #00b4e6;
+    --ba-cta-text: #101923;
+    --ba-soft: rgb(0 214 250 / 0.18);
+    --ba-soft-1: #1f465c;
+    --ba-soft-2: #17607d;
+    --ba-soft-text: #9eeffd;
+    --ba-plain-1: #22364b;
+    --ba-plain-2: #2f4c66;
+    --ba-navy-btn: #0a3b70;
+    --ba-navy-btn-rim: #2f86d8;
+    --ba-off: #2a3948;
+    --ba-off-text: #6f8092;
+    --ba-sel: rgb(0 214 250 / 0.2);
+    --ba-sel-text: #ffffff;
+    --ba-sel-bar: #00d6fa;
+    --ba-seg-bg: #22364b;
+    --ba-pick: #00d6fa;
+    --ba-shade: 0 0 0;
+    --ba-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+    --ba-shadow-btn: 0 2px 2px rgb(0 0 0 / 0.4);
+    --ba-shadow-edge: 0 2px 0 rgb(0 0 0 / 0.6);
+    --ba-shadow-pop: 0 3px 0 rgb(0 0 0 / 0.7), 0 10px 18px rgb(0 0 0 / 0.45);
+    --ba-top-1: #1b2b3b;
+    --ba-top-2: #1f5673;
+    --ba-foot: #17242f;
+    --ba-foot-line: #2c3f52;
+    --ba-toast: rgb(8 16 26 / 0.92);
+  }
+}
+:root[data-theme="dark"] {
+  --ba-bg: #15212e;
+  --ba-bg-grad: none;
+  --ba-bg-pattern-opacity: 0.14;
+  --ba-panel: #1b2b3b;
+  --ba-panel-2: #213447;
+  --ba-border: #3b5168;
+  --ba-line: #7f97ae;
+  --ba-text: #ffffff;
+  --ba-text-sub: #b9c6d2;
+  --ba-text-dim: #9faab5;
+  --ba-link: #00d6fa;
+  --ba-title-bar: #00d6fa;
+  --ba-cta: #00d6fa;
+  --ba-cta-1: #35e0fc;
+  --ba-cta-2: #00b4e6;
+  --ba-cta-text: #101923;
+  --ba-soft: rgb(0 214 250 / 0.18);
+  --ba-soft-1: #1f465c;
+  --ba-soft-2: #17607d;
+  --ba-soft-text: #9eeffd;
+  --ba-plain-1: #22364b;
+  --ba-plain-2: #2f4c66;
+  --ba-navy-btn: #0a3b70;
+  --ba-navy-btn-rim: #2f86d8;
+  --ba-off: #2a3948;
+  --ba-off-text: #6f8092;
+  --ba-sel: rgb(0 214 250 / 0.2);
+  --ba-sel-text: #ffffff;
+  --ba-sel-bar: #00d6fa;
+  --ba-seg-bg: #22364b;
+  --ba-pick: #00d6fa;
+  --ba-shade: 0 0 0;
+  --ba-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  --ba-shadow-btn: 0 2px 2px rgb(0 0 0 / 0.4);
+  --ba-shadow-edge: 0 2px 0 rgb(0 0 0 / 0.6);
+  --ba-shadow-pop: 0 3px 0 rgb(0 0 0 / 0.7), 0 10px 18px rgb(0 0 0 / 0.45);
+  --ba-top-1: #1b2b3b;
+  --ba-top-2: #1f5673;
+  --ba-foot: #17242f;
+  --ba-foot-line: #2c3f52;
+  --ba-toast: rgb(8 16 26 / 0.92);
+}
+
+/* ---- 기본 도형: 상자를 기울이고 내용은 되돌린다 ---- */
+.ba-slant {
+  transform: skewX(var(--ba-skew));
+  border-radius: var(--ba-radius);
+}
+.ba-slant > * {
+  transform: skewX(var(--ba-unskew));
+}
+
+/* ---- 삼각 면 무늬 ----
+ * 세 겹: 맨 위는 시작 색에서 투명으로 가는 덮개(무늬가 한쪽에서 서서히 나타난다), 가운데는 삼각형 띠, 맨 아래는 두 색 그라데이션.
+ * --f1(무늬 없는 쪽 색), --f2(무늬 있는 쪽 색)만 바꾸면 버튼, 띠, 카드에 같이 쓴다. 가상 요소를 쓰지 않아 Mantine Button에도 얹을 수 있다.
+ */
+.ba-facet {
+  background:
+    linear-gradient(90deg, var(--f1) 28%, transparent 82%),
+    var(--ba-facet) right center / auto 230% repeat-x,
+    linear-gradient(90deg, var(--f1), var(--f2));
+}
+.ba-facet--left {
+  background:
+    linear-gradient(270deg, var(--f1) 34%, transparent 88%),
+    var(--ba-facet) left center / auto 260% repeat-x,
+    linear-gradient(270deg, var(--f1), var(--f2));
+}
+
+/* 패널: 흰 바탕, 회청 테두리, 얕은 남색 그림자 */
+.ba-panel {
+  background: var(--ba-panel);
+  border: 1px solid var(--ba-border);
+  border-radius: var(--ba-radius);
+  box-shadow: var(--ba-shadow);
+}
+
+/* 위 띠(화면 제목 줄): 왼쪽에 옅은 하늘 면, 오른쪽 아래만 둥글게 */
+.ba-topbar {
+  --f1: var(--ba-top-1);
+  --f2: var(--ba-top-2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 0 0 var(--ba-radius-lg) 0;
+  box-shadow: var(--ba-shadow-btn);
+  color: var(--ba-text);
+}
+
+/* 페이지 제목: 왼쪽에 기운 막대 */
+.ba-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: var(--ba-text);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.ba-title::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 0.9em;
+  background: var(--ba-title-bar);
+  transform: skewX(var(--ba-skew));
+}
+
+/* 구역 제목: 아래 짧은 하늘색 밑줄(게임의 노란 밑줄을 하늘색으로 옮김) */
+.ba-heading {
+  display: inline-block;
+  justify-self: start;
+  margin: 0;
+  padding-bottom: 4px;
+  color: var(--ba-text);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(var(--ba-sel-bar), var(--ba-sel-bar)) left bottom / 2.2em 4px no-repeat;
+}
+
+/* ---- 버튼 ----
+ * 바탕 색 + 오른쪽 삼각 면 + 아래 짧은 남색 그림자. 주 행동은 하늘색(남색 글자), 보조는 옅은 하늘, 흰 버튼은 옅은 회청 면.
+ * 화면 위 버튼은 ba-slant를 함께 붙인다.
+ */
+.ba-btn {
+  --f1: var(--ba-soft-1);
+  --f2: var(--ba-soft-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--ba-radius);
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  color: var(--ba-soft-text);
+  background:
+    linear-gradient(90deg, var(--f1) 28%, transparent 82%),
+    var(--ba-facet) right center / auto 230% repeat-x,
+    linear-gradient(90deg, var(--f1), var(--f2));
+  box-shadow: var(--ba-shadow-btn);
+}
+.ba-btn:hover {
+  filter: brightness(1.04) saturate(1.06);
+}
+.ba-btn--cta {
+  --f1: var(--ba-cta-1);
+  --f2: var(--ba-cta-2);
+  color: var(--ba-cta-text);
+}
+.ba-btn--plain {
+  --f1: var(--ba-plain-1);
+  --f2: var(--ba-plain-2);
+  color: var(--ba-text);
+}
+.ba-btn--navy {
+  color: #ffffff;
+  background: var(--ba-navy-btn);
+  box-shadow:
+    inset 0 0 0 2px var(--ba-navy-btn-rim),
+    var(--ba-shadow-edge);
+}
+.ba-btn:disabled,
+.ba-btn[aria-disabled="true"] {
+  color: var(--ba-off-text);
+  background: var(--ba-off);
+  box-shadow: none;
+  cursor: not-allowed;
+  filter: none;
+}
+.ba-btn:focus-visible {
+  outline: 2px solid var(--ba-link);
+  outline-offset: 2px;
+}
+.ba-btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+.ba-slant.ba-btn:active {
+  transform: skewX(var(--ba-skew)) translateY(1px);
+}
+
+/* 세그먼트 전환: 선택 칸은 남색에 흰 글자 */
+.ba-seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--ba-seg-bg);
+  border-radius: var(--ba-radius);
+}
+.ba-seg > button {
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 3px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ba-text);
+  background: transparent;
+  cursor: pointer;
+}
+.ba-seg > button[aria-pressed="true"] {
+  background: var(--ba-sel);
+  color: var(--ba-sel-text);
+}
+.ba-seg.ba-slant > button {
+  transform: skewX(var(--ba-unskew));
+}
+
+/* 기운 탭 줄: 탭끼리 붙여 놓고, 선택 탭은 남색에 흰 글자와 아래 하늘색 막대 */
+.ba-tabs {
+  display: inline-flex;
+  gap: 3px;
+  padding-left: 6px;
+}
+.ba-tabs > button {
+  height: 32px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--ba-radius) var(--ba-radius) 0 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ba-soft-text);
+  background: var(--ba-soft);
+  cursor: pointer;
+  transform: skewX(var(--ba-skew));
+}
+.ba-tabs > button > span {
+  display: inline-block;
+  transform: skewX(var(--ba-unskew));
+}
+.ba-tabs > button[aria-selected="true"] {
+  color: var(--ba-sel-text);
+  background: var(--ba-sel);
+  box-shadow: inset 0 -3px 0 var(--ba-sel-bar);
+}
+
+/* 사이드바 메뉴: 선택 항목은 기운 남색 바탕, 왼쪽 하늘색 막대, 흰 글자 */
+.ba-nav {
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  background: var(--ba-panel);
+}
+.ba-nav > a {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  padding: 9px 14px;
+  border-radius: var(--ba-radius);
+  color: var(--ba-text);
+  text-decoration: none;
+  font-size: 14px;
+}
+.ba-nav > a[aria-current="page"] {
+  color: var(--ba-sel-text);
+}
+.ba-nav > a[aria-current="page"]::before,
+.ba-nav > a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  transform: skewX(var(--ba-skew));
+}
+.ba-nav > a[aria-current="page"]::before {
+  inset: 3px 2px;
+  border-radius: var(--ba-radius);
+  background: var(--ba-sel);
+}
+.ba-nav > a[aria-current="page"]::after {
+  top: 3px;
+  bottom: 3px;
+  left: 2px;
+  width: 4px;
+  background: var(--ba-sel-bar);
+}
+
+/* 배지(장갑, 공격 타입, 상태): 기운 작은 칩 */
+.ba-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 9px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* 선택 테두리: 좌우 괄호 모양(고른 카드, 고른 칸). 노랑 대신 하늘색 */
+.ba-pick {
+  position: relative;
+}
+.ba-pick::before,
+.ba-pick::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 32%;
+  border: 3px solid var(--ba-pick);
+  pointer-events: none;
+}
+.ba-pick::before {
+  left: -4px;
+  border-right: 0;
+  border-radius: 7px 0 0 7px;
+}
+.ba-pick::after {
+  right: -4px;
+  border-left: 0;
+  border-radius: 0 7px 7px 0;
+}
+
+/* 고르기: 남색 고리에 하늘색 점, 남색 네모에 하늘색 체크 */
+.ba-radio,
+.ba-check {
+  appearance: none;
+  display: inline-grid;
+  place-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 2px solid var(--ba-line);
+  background: var(--ba-panel);
+  cursor: pointer;
+}
+.ba-radio {
+  border-radius: 50%;
+}
+.ba-radio:checked::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ba-pick);
+}
+.ba-check {
+  border-radius: 3px;
+}
+.ba-check:checked::before {
+  content: "";
+  width: 4px;
+  height: 8px;
+  margin-top: -2px;
+  border: solid var(--ba-pick);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* 팝업: 머리는 위 띠와 같은 면 무늬, 몸은 흰색, 발은 옅은 회청에 윗선. 아래에 남색 두께 */
+.ba-popup {
+  display: grid;
+  overflow: hidden;
+  border-radius: var(--ba-radius-lg);
+  background: var(--ba-panel);
+  box-shadow: var(--ba-shadow-pop);
+  color: var(--ba-text);
+}
+.ba-popup > header {
+  --f1: var(--ba-top-1);
+  --f2: var(--ba-top-2);
+  padding: 10px 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--ba-foot-line);
+}
+.ba-popup > div {
+  padding: 14px 16px;
+}
+.ba-popup > footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--ba-foot);
+  border-top: 1px solid var(--ba-foot-line);
+}
+
+/* 말풍선(도움말): 흰 바탕에 밝은 하늘색 테두리 */
+.ba-tip {
+  display: inline-block;
+  padding: 6px 10px;
+  border: 2px solid var(--ba-tip-rim);
+  border-radius: 6px;
+  background: var(--ba-panel);
+  box-shadow: var(--ba-shadow);
+  color: var(--ba-text);
+  font-size: 13px;
+}
+/* 알림 띠(토스트): 짙은 남색 반투명에 흰 글자 */
+.ba-toast {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--ba-toast);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+/* 알림 점: 주홍(노란 점은 쓰지 않는다) */
+.ba-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ba-alert);
+  box-shadow: 0 0 0 1.5px var(--ba-panel);
+}
+
+/* 편성 카드: 기운 초상화 카드, 아래 공격 타입 색 띠(--bullet) */
+.ba-fcard {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 28px;
+  height: 32px;
+  overflow: hidden;
+  border: 1px solid var(--bullet);
+  border-radius: var(--ba-radius);
+  background: var(--ba-seg-bg);
+  box-shadow: var(--ba-shadow);
+  transform: skewX(var(--ba-skew));
+}
+.ba-fcard > img {
+  position: absolute;
+  top: 0;
+  left: -14%;
+  width: 128%;
+  height: 100%;
+  object-fit: cover;
+  transform: skewX(var(--ba-unskew));
+}
+.ba-fcard::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--bullet);
+}
+.ba-frow {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.ba-frow > .gap {
+  width: 4px;
+}
+
+/* EX 카드: 기운 카드(회청 면 무늬 바탕), 초상화, 왼쪽 아래 남색 코스트 동그라미 */
+.ba-excard {
+  --f1: #dfe6ec;
+  --f2: #b9c5d0;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 52px;
+  height: 44px;
+  border-radius: var(--ba-radius);
+  box-shadow: var(--ba-shadow-btn);
+  transform: skewX(var(--ba-skew));
+}
+.ba-excard > span {
+  position: absolute;
+  inset: 2px;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.ba-excard > span > img {
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  object-fit: cover;
+  transform: skewX(var(--ba-unskew));
+}
+.ba-excard > b {
+  position: absolute;
+  left: -6px;
+  bottom: -5px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ba-cost-tag);
+  box-shadow: 0 0 0 1.5px #ffffff;
+  color: #ffffff;
+  font-family: Rubik, sans-serif;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  transform: skewX(var(--ba-unskew));
+}
+
+/* 코스트 칸: 열 칸, 찬 칸은 하늘색. 기울이지 않는다 */
+.ba-cost {
+  display: inline-flex;
+  gap: 2px;
+}
+.ba-cost > i {
+  width: 16px;
+  height: 9px;
+  border-radius: var(--ba-radius-xs);
+  background: var(--ba-seg-bg);
+  box-shadow: inset 0 0 0 1px var(--ba-border);
+}
+.ba-cost > i[data-on] {
+  background: linear-gradient(var(--ba-cta-1), var(--ba-cta-2));
+  box-shadow: none;
+}
+
+/* 성급 별: 게임 별 그림(노랑 = 학생 성급, 하늘 = 전무 성급) 위에 숫자. 노랑을 빼는 규칙의 예외 */
+.ba-star {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 15px;
+}
+.ba-star > img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+}
+.ba-star > span {
+  grid-area: 1 / 1;
+  padding-top: 1px;
+  color: #6b3a00;
+  font-family: Rubik, sans-serif;
+  font-size: 9px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+}
+.ba-star[data-ue] > span {
+  color: #ffffff;
+  text-shadow: 0 0 2px #1a6fae;
+}
+
+/* 페이지 바탕: 게임 메뉴 화면의 하늘색 바탕을 다시 그린 것. 그라데이션 위에 빗변 45도의 납작한 삼각형 격자(bg/triangles.svg,
+   tools/triangle-bg.mjs가 만든다). 화면에 고정해 스크롤해도 움직이지 않고 내용 아래에 깔린다. 카드와 표 안쪽에는 깔지 않는다 */
+.ba-page-bg {
+  isolation: isolate;
+  background-color: var(--ba-bg);
+}
+.ba-page-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    url("bg/triangles.svg") center top / cover no-repeat,
+    var(--ba-bg-grad);
+  opacity: var(--ba-bg-pattern-opacity);
+}
+
+/* 이름 밑 노란 줄(게임의 이름 밑줄): 굵기는 글자 크기의 1/6, 글자보다 양쪽 0.1em 길다. 노랑을 빼는 규칙의 예외. 글자를 감싼 span에 붙인다 */
+.ba-name-line {
+  padding: 0 0.1em 0.08em;
+  background: linear-gradient(rgb(255 238 0 / 0.94), rgb(255 238 0 / 0.94)) left bottom / 100% 0.17em no-repeat;
+}
+
+/* 흰 칩(재화 표시) */
+.ba-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 14px;
+  background: var(--ba-panel);
+  box-shadow: var(--ba-shadow);
+  color: var(--ba-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 남색 패널(레벨, 강조 정보) */
+.ba-panel-navy {
+  background: linear-gradient(100deg, var(--ba-navy-1), var(--ba-navy-2));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    var(--ba-shadow);
+  color: #ffffff;
+}
+
+/* RANK, T1 같은 남색 사선 칩 */
+.ba-rank {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  background: var(--ba-rank);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  font-style: italic;
+}
+
+/* 분류 칩(매일, 업적) */
+.ba-cat {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 7px;
+  border-radius: 3px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--ba-chip-blue);
+}
+.ba-cat[data-tone="orange"] {
+  background: var(--ba-chip-orange);
+}
+
+/* 큰 숫자: 굵은 기울임(글꼴의 italic, transform 아님) */
+.ba-num {
+  font-family: Rubik, "Pretendard Variable", Pretendard, sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 진행 막대: 기울이지 않는다 */
+.ba-gauge {
+  height: 6px;
+  background: var(--ba-seg-bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.ba-gauge > i {
+  display: block;
+  height: 100%;
+  background: var(--ba-gauge);
+}
+
+/* 스크롤바: 얇은 회청 하늘 막대 */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #9fc3d9 transparent;
+}
